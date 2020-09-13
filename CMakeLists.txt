@@ -3,4 +3,4 @@ project(LPTestTask C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(LPTestTask main.c)
+add_executable(LPTestTask src/str_utils.c src/str_utils.h src/main.c)
