@@ -7,7 +7,7 @@
 #define START_HT_SIZE 2
 #define HT_MAX_MEMORY_USAGE_SIZE 1024
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MIN(a, b) (((a)<(b))?(a):(b))
 
 typedef struct ht_word_node_struct {
     char *word;
@@ -32,17 +32,11 @@ hash_table *ht_rebuild(hash_table *old_ht);
 
 void ht_compact(hash_table *hashTable);
 
-void swap(void **a, void **b) {
-    void *c = *a;
-    *a = *b;
-    *b = c;
-}
-
 int main(int argc, char **argv) {
     hash_table *ht = init_hash_table(START_HT_SIZE);
 
     char line[MAX_LINE_SIZE];
-    while (gets(line)) {
+    while (fgets(line, sizeof(line), stdin)) {
         trim(line);
         to_lower_case(line);
         if (strlen(line) == 0) {
@@ -70,7 +64,10 @@ int main(int argc, char **argv) {
                 max_position = t;
             }
         }
-        swap(&(ht->table[i]), &(ht->table[max_position]));
+        ht_word_node *tmp = ht->table[i];
+        ht->table[i] = ht->table[max_position];
+        ht->table[max_position] = tmp;
+
         printf("%s: %lu\n", ht->table[i]->word, ht->table[i]->counter);
     }
     destroy_hash_table(ht);
@@ -183,6 +180,6 @@ void ht_compact(hash_table *hashTable) {
             hashTable->table[i2++] = hashTable->table[i1];
         }
     }
-    hashTable->table_size=i2;
+    hashTable->table_size = i2;
 }
 
